@@ -2,24 +2,28 @@ const express = require('express');
 const app = express();
 const port = 9090;
 
-function isPrime(number) {
-    if (number <= 1) return false; 
-    for (let i = 2; i < number; i++) { 
-        if (number % i === 0) return false; 
+function calculateFactorial(number) {
+    if (number < 0) return null; 
+    let result = 1;
+    for (let i = 1; i <= number; i++) {
+        result *= i;
     }
-    return true; 
+    return result;
 }
 
-app.get('/assignments/prime/:number', (req, res) => {
+
+app.get('/assignments/factorial/:number', (req, res) => {
     const number = parseInt(req.params.number);
 
-    if (isNaN(number)) {
-        return res.json({ error: "Please provide a valid number." });
+
+    if (isNaN(number) || number < 0) {
+        return res.status(400).json({ error: "Please provide a non-negative integer." });
     }
 
-    const result = isPrime(number);
-    res.json({ isPrime: result });
+    const factorial = calculateFactorial(number);
+    res.json({ factorial });
 });
+
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
