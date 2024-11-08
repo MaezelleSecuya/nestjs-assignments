@@ -2,22 +2,23 @@ const express = require('express');
 const app = express();
 const port = 9090;
 
+function isPrime(number) {
+    if (number <= 1) return false; 
+    for (let i = 2; i < number; i++) { 
+        if (number % i === 0) return false; 
+    }
+    return true; 
+}
 
-app.get('/assignments/fibonacci/:n', (req, res) => {
-    const n = parseInt(req.params.n);
+app.get('/assignments/prime/:number', (req, res) => {
+    const number = parseInt(req.params.number);
 
-    if (isNaN(n) || n < 1) {
-        return res.status(400).json({ error: "Please provide a positive integer for 'n'." });
+    if (isNaN(number)) {
+        return res.json({ error: "Please provide a valid number." });
     }
 
-    const sequence = [];
-    let a = 0, b = 1;
-    for (let i = 0; i < n; i++) {
-        sequence.push(a);
-        [a, b] = [b, a + b];
-    }
-
-    res.json({ sequence });
+    const result = isPrime(number);
+    res.json({ isPrime: result });
 });
 
 app.listen(port, () => {
